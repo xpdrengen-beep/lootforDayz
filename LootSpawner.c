@@ -39,6 +39,12 @@ class LootSpawner
 			return true;
 		}		
 
+		if (IsHousePrefab(info, LootHouse06.PREFAB))
+		{
+			TrySpawnHouse(ent, "HOUSE06");
+			return true;
+		}
+		
 		if (IsHousePrefab(info, LootHouse05_02.PREFAB))
 		{
 			TrySpawnHouse(ent, "HOUSE05_02");
@@ -134,6 +140,9 @@ class LootSpawner
 		
 		if (houseType == "HOUSE07")
 			LootHouse07.Spawn(house, data);		
+		
+		if (houseType == "HOUSE06")
+			LootHouse06.Spawn(house, data);
 		
 		if (houseType == "HOUSE05")
 			LootHouse05.Spawn(house, data);

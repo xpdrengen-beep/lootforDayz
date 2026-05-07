@@ -8,16 +8,22 @@ class LootSpawner
 			return true;
 
 		string info = ent.ToString();
-
+		
 		if (IsHousePrefab(info, LootHouse07.PREFAB))
 		{
 			TrySpawnHouse(ent, "HOUSE07");
 			return true;
-		}
+		}		
 
-		if (IsHousePrefab(info, LootHouse04.PREFAB))
+		if (IsHousePrefab(info, LootHouse05_02.PREFAB))
 		{
-			TrySpawnHouse(ent, "HOUSE04");
+			TrySpawnHouse(ent, "HOUSE05_02");
+			return true;
+		}
+		
+		if (IsHousePrefab(info, LootHouse05.PREFAB))
+		{
+			TrySpawnHouse(ent, "HOUSE05");
 			return true;
 		}
 
@@ -91,11 +97,14 @@ class LootSpawner
 		Print("[Loot] House origin: " + house.GetOrigin());
 
 		if (houseType == "HOUSE07")
-			LootHouse07.Spawn(house, data);
+			LootHouse07.Spawn(house, data);		
+		
+		if (houseType == "HOUSE05")
+			LootHouse05.Spawn(house, data);
 
-		if (houseType == "HOUSE04")
-			LootHouse04.Spawn(house, data);
-
+		if (houseType == "HOUSE05_02")
+			LootHouse05_02.Spawn(house, data);
+		
 		if (houseType == "HOUSE03")
 			LootHouse03.Spawn(house, data);
 

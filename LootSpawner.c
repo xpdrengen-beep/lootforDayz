@@ -9,19 +9,33 @@ class LootSpawner
 
 		string info = ent.ToString();
 
-		if (info.Contains(LootHouse03.PREFAB))
+		if (IsHousePrefab(info, LootHouse04.PREFAB))
+		{
+			TrySpawnHouse(ent, "HOUSE04");
+			return true;
+		}
+
+		if (IsHousePrefab(info, LootHouse03.PREFAB))
 		{
 			TrySpawnHouse(ent, "HOUSE03");
 			return true;
 		}
 
-		if (info.Contains(LootHouse02.PREFAB))
+		if (IsHousePrefab(info, LootHouse02.PREFAB))
 		{
 			TrySpawnHouse(ent, "HOUSE02");
 			return true;
 		}
 
 		return true;
+	}
+
+	static bool IsHousePrefab(string info, string prefab)
+	{
+		if (prefab == "")
+			return false;
+
+		return info.Contains(prefab);
 	}
 
 	static void TrySpawnHouse(IEntity house, string houseType)
@@ -69,6 +83,9 @@ class LootSpawner
 
 		Print("[Loot] Spawning dynamic loot for: " + houseType);
 		Print("[Loot] House origin: " + house.GetOrigin());
+
+		if (houseType == "HOUSE04")
+			LootHouse04.Spawn(house, data);
 
 		if (houseType == "HOUSE03")
 			LootHouse03.Spawn(house, data);

@@ -1,81 +1,126 @@
 class LootSpawner
 {
 	static ref map<string, ref SpawnedHouseLoot> ActiveHouses = new map<string, ref SpawnedHouseLoot>();
+	static ref array<IEntity> QueuedHouseEntities = new array<IEntity>();
+	static ref array<string> QueuedHouseTypes = new array<string>();
 
 	static bool HouseCallback(IEntity ent)
 	{
 		if (!ent)
 			return true;
 
-		string info = ent.ToString();
+		string info = GetEntityPrefabName(ent);
 		
 		if (IsHousePrefab(info, LootHouse_WoodenE1I01_P.PREFAB))
 		{
-			TrySpawnHouse(ent, "HOUSEWOODE1I01_P");
+			QueueHouse(ent, "HOUSEWOODE1I01_P");
 			return true;
 		}
 		
 		if (IsHousePrefab(info, LootHouse_WoodenE1I01.PREFAB))
 		{
-			TrySpawnHouse(ent, "HOUSEWOODE1I01");
+			QueueHouse(ent, "HOUSEWOODE1I01");
 			return true;
 		}
 		
 		if (IsHousePrefab(info, LootHouse_WoodenE1I03.PREFAB))
 		{
-			TrySpawnHouse(ent, "HOUSEWOODE1I03");
+			QueueHouse(ent, "HOUSEWOODE1I03");
 			return true;
 		}
 		
 		if (IsHousePrefab(info, LootHouseRaG.PREFAB))
 		{
-			TrySpawnHouse(ent, "HOUSERAG");
+			QueueHouse(ent, "HOUSERAG");
 			return true;
 		}
 		
 		if (IsHousePrefab(info, LootHouse08.PREFAB))
 		{
-			TrySpawnHouse(ent, "HOUSE08");
+			QueueHouse(ent, "HOUSE08");
 			return true;
 		}
 		
 		if (IsHousePrefab(info, LootHouse07.PREFAB))
 		{
-			TrySpawnHouse(ent, "HOUSE07");
+			QueueHouse(ent, "HOUSE07");
 			return true;
 		}		
 
 		if (IsHousePrefab(info, LootHouse06.PREFAB))
 		{
-			TrySpawnHouse(ent, "HOUSE06");
+			QueueHouse(ent, "HOUSE06");
 			return true;
 		}
 		
 		if (IsHousePrefab(info, LootHouse05_02.PREFAB))
 		{
-			TrySpawnHouse(ent, "HOUSE05_02");
+			QueueHouse(ent, "HOUSE05_02");
 			return true;
 		}
 		
 		if (IsHousePrefab(info, LootHouse05.PREFAB))
 		{
-			TrySpawnHouse(ent, "HOUSE05");
+			QueueHouse(ent, "HOUSE05");
 			return true;
 		}
 
 		if (IsHousePrefab(info, LootHouse03.PREFAB))
 		{
-			TrySpawnHouse(ent, "HOUSE03");
+			QueueHouse(ent, "HOUSE03");
 			return true;
 		}
 
 		if (IsHousePrefab(info, LootHouse02.PREFAB))
 		{
-			TrySpawnHouse(ent, "HOUSE02");
+			QueueHouse(ent, "HOUSE02");
 			return true;
 		}
 
 		return true;
+	}
+
+	static string GetEntityPrefabName(IEntity ent)
+	{
+		if (!ent)
+			return "";
+
+		EntityPrefabData prefabData = ent.GetPrefabData();
+
+		if (!prefabData)
+			return "";
+
+		return prefabData.GetPrefabName();
+	}
+
+	static void QueueHouse(IEntity house, string houseType)
+	{
+		if (!house || houseType == "")
+			return;
+
+		QueuedHouseEntities.Insert(house);
+		QueuedHouseTypes.Insert(houseType);
+	}
+
+	static void ClearQueuedHouses()
+	{
+		QueuedHouseEntities.Clear();
+		QueuedHouseTypes.Clear();
+	}
+
+	static void FlushQueuedHouses()
+	{
+		int count = QueuedHouseEntities.Count();
+
+		for (int i = 0; i < count; i++)
+		{
+			IEntity house = QueuedHouseEntities[i];
+			string houseType = QueuedHouseTypes[i];
+
+			TrySpawnHouse(house, houseType);
+		}
+
+		ClearQueuedHouses();
 	}
 
 	static bool IsHousePrefab(string info, string prefab)

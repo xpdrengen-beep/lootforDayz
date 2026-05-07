@@ -19,13 +19,14 @@ class DynamicLootManager
 
 		Print("[Loot] Dynamic loot manager started.");
 
-		CheckPlayers();
-
 		GetGame().GetCallqueue().CallLater(CheckPlayers, 5000, true);
+		GetGame().GetCallqueue().CallLater(CheckPlayers, 1000, false);
 	}
 
 	static void CheckPlayers()
 	{
+		LootSpawner.ClearQueuedHouses();
+
 		array<vector> playerPositions = {};
 
 		array<int> players = {};
@@ -48,6 +49,7 @@ class DynamicLootManager
 			);
 		}
 
+		LootSpawner.FlushQueuedHouses();
 		CheckDespawn(playerPositions);
 	}
 

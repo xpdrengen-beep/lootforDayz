@@ -119,13 +119,10 @@ class LootSpawner
 		if (!house)
 			return null;
 
-		if (houseType == "HOUSEWOODE1I01" || houseType == "HOUSEWOODE1I01_P")
-		{
-			IEntity rootHouse = house.GetRootParent();
+		IEntity rootHouse = house.GetRootParent();
 
-			if (rootHouse)
-				return rootHouse;
-		}
+		if (rootHouse)
+			return rootHouse;
 
 		return house;
 	}

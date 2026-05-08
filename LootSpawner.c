@@ -30,6 +30,12 @@ class LootSpawner
 			return true;
 		}
 		
+		if (IsHousePrefab(info, LootHouse_TownE2I02.PREFAB))
+		{
+			QueueHouse(ent, "HOUSETOWNE2I02");
+			return true;
+		}
+		
 		if (IsHousePrefab(info, LootHouseRaG.PREFAB))
 		{
 			QueueHouse(ent, "HOUSERAG");
@@ -211,6 +217,9 @@ class LootSpawner
 		
 		if (houseType == "HOUSEWOODE1I03")
 			LootHouse_WoodenE1I03.Spawn(house, data);
+		
+		if (houseType == "HOUSETOWNE2I02")
+			LootHouse_TownE2I02.Spawn(house, data);
 		
 		if (houseType == "HOUSERAG")
 			LootHouseRaG.Spawn(house, data);		

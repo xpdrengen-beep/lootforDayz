@@ -178,10 +178,10 @@ class LootSpawner
 		Print("[Loot] House origin: " + house.GetOrigin());
 
 		if (houseType == "HOUSEWOODE1I01_P")
-			LootHouseRaG.Spawn(house, data);
+			LootHouse_WoodenE1I01_P.Spawn(house, data);
 		
 		if (houseType == "HOUSEWOODE1I01")
-			LootHouseRaG.Spawn(house, data);
+			LootHouse_WoodenE1I01.Spawn(house, data);
 		
 		if (houseType == "HOUSEWOODE1I03")
 			LootHouse_WoodenE1I03.Spawn(house, data);

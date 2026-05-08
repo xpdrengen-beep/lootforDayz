@@ -34,8 +34,6 @@ Use a normal category name:
 
 This applies to every house that asks for `KITCHEN` loot unless that house has a more specific override.
 
-`TOOL` has no hardcoded items yet, so tool spawn points only spawn loot when you add a `TOOL` or `HOUSE_TYPE.TOOL` table in this JSON file.
-
 ## Add loot for one house only
 
 Use this format:
@@ -128,10 +126,8 @@ Examples:
 ```text
 FARMHOUSEE1L01.WEAPON
 FARMHOUSEE1L01_GREEN.KITCHEN
-FARMHOUSEE1L01_WOOD.TOOL
 BRICKBUILDING01.WEAPON
 HOUSE2FLOORS01.KITCHEN
-HOUSE2FLOORS01.TOOL
 HOUSE08.WEAPON
 HOUSE07.BED
 HOUSE06.KITCHEN

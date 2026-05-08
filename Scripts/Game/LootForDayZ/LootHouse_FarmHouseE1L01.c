@@ -72,7 +72,7 @@ class LootHouse_FarmHouseE1L01
 
 		return MedicalSpawns;
 	}
-	// Tool spawns are configurable through TOOL or HOUSE_TYPE.TOOL server tables.
+	// Tool spawn points are kept for later tool loot support. No items are spawned from these points yet.
 	static ref array<vector> ToolSpawns;
 
 	static array<vector> GetToolSpawns()
@@ -94,10 +94,9 @@ class LootHouse_FarmHouseE1L01
 	{
 		if (!house || !data)
 			return;
-		LootSpawner.SpawnWeightedFromArray(house, data, GetBedSpawns(), LootTables.GetFarmHouseE1L01BedLoot(), 0.24, "BED", "0 0 0", 0.01);
-		LootSpawner.SpawnWeightedFromArray(house, data, GetKitchenSpawns(), LootTables.GetFarmHouseE1L01KitchenItems(), 0.20, "KITCHEN", "0 0 0", 0.01);
-		LootSpawner.SpawnWeightedFromArray(house, data, GetWeaponSpawns(), LootTables.GetFarmHouseE1L01WeaponItems(), 0.08, "WEAPON", "0 0 0", 0.02);
-		LootSpawner.SpawnWeightedFromArray(house, data, GetMedicalSpawns(), LootTables.GetFarmHouseE1L01MedicalItems(), 0.18, "MEDICAL", "0 0 0", 0.01);
-		LootSpawner.SpawnWeightedFromArray(house, data, GetToolSpawns(), LootTables.GetToolItems(), 0.15, "TOOL", "0 0 0", 0.01);
+		LootSpawner.SpawnWeightedFromArray(house, data, GetBedSpawns(), LootTables.GetTownE2I02BedLoot(), 0.24, "BED", "0 0 0", 0.01);
+		LootSpawner.SpawnWeightedFromArray(house, data, GetKitchenSpawns(), LootTables.GetTownE2I02KitchenItems(), 0.20, "KITCHEN", "0 0 0", 0.01);
+		LootSpawner.SpawnWeightedFromArray(house, data, GetWeaponSpawns(), LootTables.GetTownE2I02WeaponItems(), 0.08, "WEAPON", "0 0 0", 0.02);
+		LootSpawner.SpawnWeightedFromArray(house, data, GetMedicalSpawns(), LootTables.GetTownE2I02MedicalItems(), 0.18, "MEDICAL", "0 0 0", 0.01);
 	}
 }

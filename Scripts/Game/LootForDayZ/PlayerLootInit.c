@@ -11,6 +11,9 @@ modded class SCR_ChimeraCharacter
 
 	void StartLootSystem()
 	{
+		if (DynamicLootManager.Started)
+			return;
+
 		Print("STARTING DYNAMIC LOOT");
 		DynamicLootManager.Start();
 	}

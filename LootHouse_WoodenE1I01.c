@@ -3,26 +3,26 @@ class LootHouse_WoodenE1I01
 	static string PREFAB = "{3B877DB7AE5EA3BC}PrefabLibrary/DefaultLibrary/Structures/Houses/House_Wooden_E_1I01/House_Wooden_E_1I01.et";
 
 	static ref array<vector> BedSpawns = {
-		"3.316 1.67 2.105",
-		"3.571 1.863 1.104",
-		"1.304 2.167 -2.352"
+		"3.362 1.658 2.011",
+		"3.662 1.864 1.201"
 	};
 
 	static ref array<vector> KitchenSpawns = {
-		"-4.112 2.191 -0.482",
-		"-2.515 2.085 -0.815",
-		"-0.95 2.06 -2.177",
-		"-0.032 2.06 -2.44"
+		"-0.952 2.062 -2.256",
+		"-0.062 2.062 -2.055",
+		"-2.508 2.085 -0.768",
+		"-3.281 2.182 -0.501",
+		"-3.968 2.181 -0.636"
 	};
 
 	static ref array<vector> WeaponSpawns = {
-		"0.814 2.164 1.985"
+		"1.463 2.173 -2.464"
 	};
 
 	static ref array<vector> MedicalSpawns = {
-		"-4.804 1.171 0.439",
-		"-4.845 2.066 2.178",
-		"-0.032 2.06 -2.44"
+		"-3.705 2.304 2.704",
+		"-4.855 2.02 2.186",
+		"-4.587 1.173 0.676"
 	};
 
 	static void Spawn(IEntity house, SpawnedHouseLoot data)

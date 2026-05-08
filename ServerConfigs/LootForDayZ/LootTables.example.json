@@ -2,22 +2,6 @@
   "Enabled": true,
   "Categories": [
     {
-      "Category": "__README_JSON_DOES_NOT_SUPPORT_COMMENTS__",
-      "Items": []
-    },
-    {
-      "Category": "__README_USE_CATEGORY_FOR_ALL_HOUSES_EXAMPLE_KITCHEN__",
-      "Items": []
-    },
-    {
-      "Category": "__README_USE_HOUSE_CATEGORY_FOR_ONE_HOUSE_EXAMPLE_HOUSE06.KITCHEN__",
-      "Items": []
-    },
-    {
-      "Category": "__README_WEIGHT_IS_RARITY_HIGHER_WEIGHT_MEANS_MORE_COMMON__",
-      "Items": []
-    },
-    {
       "Category": "BED",
       "Items": [
         {
@@ -67,28 +51,6 @@
         {
           "Prefab": "{AC298BA8A7D27007}Prefabs/Items/Equipment/Backpacks/Backpack_Medical_Soviet_NoCross_01.et",
           "Weight": 100
-        }
-      ]
-    },
-    {
-      "Category": "__EXAMPLE_GLOBAL_CATEGORY_COPY_AND_RENAME__",
-      "Items": [
-        {
-          "Prefab": "{128A19AA9F731095}Prefabs/Items/Food/MeatLeg_01.et",
-          "Weight": 100
-        }
-      ]
-    },
-    {
-      "Category": "__EXAMPLE_HOUSE_CATEGORY_COPY_AND_RENAME_TO_HOUSE08.WEAPON__",
-      "Items": [
-        {
-          "Prefab": "{C1B4F7B87B720EE8}Prefabs/Weapons/Rifles/Mosin/BC_Rifle_Mosin_Nagant_9130.et",
-          "Weight": 100
-        },
-        {
-          "Prefab": "{6545DEABED4759E5}Prefabs/Weapons/Rifles/Mosin/BC_Rifle_Mosin_Nagant_9130_PU.et",
-          "Weight": 5
         }
       ]
     }

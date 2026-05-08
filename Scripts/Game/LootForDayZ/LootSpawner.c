@@ -14,6 +14,36 @@ class LootSpawner
 
 		string info = GetEntityPrefabName(ent);
 
+		if (IsHousePrefab(info, LootHouse_FarmHouseE1L01.PREFAB))
+		{
+			QueueHouse(ent, "FARMHOUSEE1L01");
+			return true;
+		}
+
+		if (IsHousePrefab(info, LootHouse_FarmHouseE1L01.PREFAB_GREEN))
+		{
+			QueueHouse(ent, "FARMHOUSEE1L01_GREEN");
+			return true;
+		}
+
+		if (IsHousePrefab(info, LootHouse_FarmHouseE1L01.PREFAB_WOOD))
+		{
+			QueueHouse(ent, "FARMHOUSEE1L01_WOOD");
+			return true;
+		}
+
+		if (IsHousePrefab(info, LootHouse_Brickbuilding01.PREFAB))
+		{
+			QueueHouse(ent, "BRICKBUILDING01");
+			return true;
+		}
+
+		if (IsHousePrefab(info, LootHouse_House2Floors01.PREFAB))
+		{
+			QueueHouse(ent, "HOUSE2FLOORS01");
+			return true;
+		}
+
 		if (IsHousePrefab(info, LootHouse_WoodenE1I01_P.PREFAB))
 		{
 			QueueHouse(ent, "HOUSEWOODE1I01_P");
@@ -241,6 +271,21 @@ class LootSpawner
 		Print("[Loot] House origin: " + house.GetOrigin());
 
 		CurrentHouseType = houseType;
+
+		if (houseType == "FARMHOUSEE1L01")
+			LootHouse_FarmHouseE1L01.Spawn(house, data);
+
+		if (houseType == "FARMHOUSEE1L01_GREEN")
+			LootHouse_FarmHouseE1L01.Spawn(house, data);
+
+		if (houseType == "FARMHOUSEE1L01_WOOD")
+			LootHouse_FarmHouseE1L01.Spawn(house, data);
+
+		if (houseType == "BRICKBUILDING01")
+			LootHouse_Brickbuilding01.Spawn(house, data);
+
+		if (houseType == "HOUSE2FLOORS01")
+			LootHouse_House2Floors01.Spawn(house, data);
 
 		if (houseType == "HOUSEWOODE1I01_P")
 			LootHouse_WoodenE1I01_P.Spawn(house, data);

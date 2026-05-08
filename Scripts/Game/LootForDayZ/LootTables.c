@@ -558,4 +558,74 @@ class LootTables
 
 		return h03WeaponItems;
 	}
+
+	static ref array<ref LootEntry> ToolItems;
+
+	static array<ref LootEntry> GetToolItems()
+	{
+		if (!ToolItems)
+			ToolItems = new array<ref LootEntry>();
+
+		return ToolItems;
+	}
+
+	static array<ref LootEntry> GetFarmHouseE1L01BedLoot()
+	{
+		return GetTownE2I02BedLoot();
+	}
+
+	static array<ref LootEntry> GetFarmHouseE1L01KitchenItems()
+	{
+		return GetTownE2I02KitchenItems();
+	}
+
+	static array<ref LootEntry> GetFarmHouseE1L01WeaponItems()
+	{
+		return GetTownE2I02WeaponItems();
+	}
+
+	static array<ref LootEntry> GetFarmHouseE1L01MedicalItems()
+	{
+		return GetTownE2I02MedicalItems();
+	}
+
+	static array<ref LootEntry> GetHouse2Floors01BedLoot()
+	{
+		return GetTownE2I02BedLoot();
+	}
+
+	static array<ref LootEntry> GetHouse2Floors01KitchenItems()
+	{
+		return GetTownE2I02KitchenItems();
+	}
+
+	static array<ref LootEntry> GetHouse2Floors01WeaponItems()
+	{
+		return GetTownE2I02WeaponItems();
+	}
+
+	static array<ref LootEntry> GetHouse2Floors01MedicalItems()
+	{
+		return GetTownE2I02MedicalItems();
+	}
+
+	static array<ref LootEntry> GetBrickbuilding01BedLoot()
+	{
+		return GetTownE2I02BedLoot();
+	}
+
+	static array<ref LootEntry> GetBrickbuilding01KitchenItems()
+	{
+		return GetTownE2I02KitchenItems();
+	}
+
+	static array<ref LootEntry> GetBrickbuilding01WeaponItems()
+	{
+		return GetTownE2I02WeaponItems();
+	}
+
+	static array<ref LootEntry> GetBrickbuilding01MedicalItems()
+	{
+		return GetTownE2I02MedicalItems();
+	}
 }

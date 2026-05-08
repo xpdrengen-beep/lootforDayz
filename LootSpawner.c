@@ -1,63 +1,176 @@
 class LootSpawner
 {
 	static ref map<string, ref SpawnedHouseLoot> ActiveHouses = new map<string, ref SpawnedHouseLoot>();
+	static ref array<IEntity> QueuedHouseEntities = new array<IEntity>();
+	static ref array<string> QueuedHouseTypes = new array<string>();
+	static ref array<string> QueuedHouseKeys = new array<string>();
 
 	static bool HouseCallback(IEntity ent)
 	{
 		if (!ent)
 			return true;
 
-		string info = ent.ToString();
+		string info = GetEntityPrefabName(ent);
 		
 		if (IsHousePrefab(info, LootHouse_WoodenE1I01_P.PREFAB))
 		{
-			TrySpawnHouse(ent, "HOUSEWOODE1I01_P");
+			QueueHouse(ent, "HOUSEWOODE1I01_P");
 			return true;
 		}
 		
 		if (IsHousePrefab(info, LootHouse_WoodenE1I01.PREFAB))
 		{
-			TrySpawnHouse(ent, "HOUSEWOODE1I01");
+			QueueHouse(ent, "HOUSEWOODE1I01");
+			return true;
+		}
+		
+		if (IsHousePrefab(info, LootHouse_WoodenE1I03.PREFAB))
+		{
+			QueueHouse(ent, "HOUSEWOODE1I03");
+			return true;
+		}
+		
+		if (IsHousePrefab(info, LootHouse_TownE2I02.PREFAB))
+		{
+			QueueHouse(ent, "HOUSETOWNE2I02Y");
+			return true;
+		}
+		
+		if (IsHousePrefab(info, LootHouse_TownE2I02.PREFAB))
+		{
+			QueueHouse(ent, "HOUSETOWNE2I02V2");
+			return true;
+		}
+		
+		if (IsHousePrefab(info, LootHouse_TownE2I02.PREFAB))
+		{
+			QueueHouse(ent, "HOUSETOWNE2I02B");
+			return true;
+		}
+		
+		if (IsHousePrefab(info, LootHouse_TownE2I02.PREFAB))
+		{
+			QueueHouse(ent, "HOUSETOWNE2I02");
 			return true;
 		}
 		
 		if (IsHousePrefab(info, LootHouseRaG.PREFAB))
 		{
-			TrySpawnHouse(ent, "HOUSERAG");
+			QueueHouse(ent, "HOUSERAG");
+			return true;
+		}
+		
+		if (IsHousePrefab(info, LootHouse08.PREFAB))
+		{
+			QueueHouse(ent, "HOUSE08");
 			return true;
 		}
 		
 		if (IsHousePrefab(info, LootHouse07.PREFAB))
 		{
-			TrySpawnHouse(ent, "HOUSE07");
+			QueueHouse(ent, "HOUSE07");
 			return true;
 		}		
 
+		if (IsHousePrefab(info, LootHouse06.PREFAB))
+		{
+			QueueHouse(ent, "HOUSE06");
+			return true;
+		}
+		
 		if (IsHousePrefab(info, LootHouse05_02.PREFAB))
 		{
-			TrySpawnHouse(ent, "HOUSE05_02");
+			QueueHouse(ent, "HOUSE05_02");
 			return true;
 		}
 		
 		if (IsHousePrefab(info, LootHouse05.PREFAB))
 		{
-			TrySpawnHouse(ent, "HOUSE05");
+			QueueHouse(ent, "HOUSE05");
 			return true;
 		}
 
 		if (IsHousePrefab(info, LootHouse03.PREFAB))
 		{
-			TrySpawnHouse(ent, "HOUSE03");
+			QueueHouse(ent, "HOUSE03");
 			return true;
 		}
 
 		if (IsHousePrefab(info, LootHouse02.PREFAB))
 		{
-			TrySpawnHouse(ent, "HOUSE02");
+			QueueHouse(ent, "HOUSE02");
 			return true;
 		}
 
 		return true;
+	}
+
+	static string GetEntityPrefabName(IEntity ent)
+	{
+		if (!ent)
+			return "";
+
+		EntityPrefabData prefabData = ent.GetPrefabData();
+
+		if (!prefabData)
+			return "";
+
+		return prefabData.GetPrefabName();
+	}
+
+	static void QueueHouse(IEntity house, string houseType)
+	{
+		if (!house || houseType == "")
+			return;
+
+		IEntity spawnHouse = GetHouseSpawnEntity(house, houseType);
+
+		if (!spawnHouse)
+			return;
+
+		string queueKey = spawnHouse.ToString() + houseType;
+
+		if (QueuedHouseKeys.Contains(queueKey))
+			return;
+
+		QueuedHouseEntities.Insert(spawnHouse);
+		QueuedHouseTypes.Insert(houseType);
+		QueuedHouseKeys.Insert(queueKey);
+	}
+
+	static IEntity GetHouseSpawnEntity(IEntity house, string houseType)
+	{
+		if (!house)
+			return null;
+
+		IEntity rootHouse = house.GetRootParent();
+
+		if (rootHouse)
+			return rootHouse;
+
+		return house;
+	}
+
+	static void ClearQueuedHouses()
+	{
+		QueuedHouseEntities.Clear();
+		QueuedHouseTypes.Clear();
+		QueuedHouseKeys.Clear();
+	}
+
+	static void FlushQueuedHouses()
+	{
+		int count = QueuedHouseEntities.Count();
+
+		for (int i = 0; i < count; i++)
+		{
+			IEntity house = QueuedHouseEntities[i];
+			string houseType = QueuedHouseTypes[i];
+
+			TrySpawnHouse(house, houseType);
+		}
+
+		ClearQueuedHouses();
 	}
 
 	static bool IsHousePrefab(string info, string prefab)
@@ -115,16 +228,37 @@ class LootSpawner
 		Print("[Loot] House origin: " + house.GetOrigin());
 
 		if (houseType == "HOUSEWOODE1I01_P")
-			LootHouseRaG.Spawn(house, data);
+			LootHouse_WoodenE1I01_P.Spawn(house, data);
 		
 		if (houseType == "HOUSEWOODE1I01")
-			LootHouseRaG.Spawn(house, data);
+			LootHouse_WoodenE1I01.Spawn(house, data);
+		
+		if (houseType == "HOUSEWOODE1I03")
+			LootHouse_WoodenE1I03.Spawn(house, data);
+		
+		if (houseType == "HOUSETOWNE2I02Y")
+			LootHouse_TownE2I02.Spawn(house, data);
+		
+		if (houseType == "HOUSETOWNE2I02V2")
+			LootHouse_TownE2I02.Spawn(house, data);
+		
+		if (houseType == "HOUSETOWNE2I02B")
+			LootHouse_TownE2I02.Spawn(house, data);		
+		
+		if (houseType == "HOUSETOWNE2I02")
+			LootHouse_TownE2I02.Spawn(house, data);
 		
 		if (houseType == "HOUSERAG")
 			LootHouseRaG.Spawn(house, data);		
 		
+		if (houseType == "HOUSE08")
+			LootHouse08.Spawn(house, data);
+		
 		if (houseType == "HOUSE07")
 			LootHouse07.Spawn(house, data);		
+		
+		if (houseType == "HOUSE06")
+			LootHouse06.Spawn(house, data);
 		
 		if (houseType == "HOUSE05")
 			LootHouse05.Spawn(house, data);

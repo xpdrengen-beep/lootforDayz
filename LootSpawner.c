@@ -4,6 +4,7 @@ class LootSpawner
 	static ref array<IEntity> QueuedHouseEntities = new array<IEntity>();
 	static ref array<string> QueuedHouseTypes = new array<string>();
 	static ref array<string> QueuedHouseKeys = new array<string>();
+	static int ActiveLootItemCount = 0;
 
 	static bool HouseCallback(IEntity ent)
 	{
@@ -11,79 +12,79 @@ class LootSpawner
 			return true;
 
 		string info = GetEntityPrefabName(ent);
-		
+
 		if (IsHousePrefab(info, LootHouse_WoodenE1I01_P.PREFAB))
 		{
 			QueueHouse(ent, "HOUSEWOODE1I01_P");
 			return true;
 		}
-		
+
 		if (IsHousePrefab(info, LootHouse_WoodenE1I01.PREFAB))
 		{
 			QueueHouse(ent, "HOUSEWOODE1I01");
 			return true;
 		}
-		
+
 		if (IsHousePrefab(info, LootHouse_WoodenE1I03.PREFAB))
 		{
 			QueueHouse(ent, "HOUSEWOODE1I03");
 			return true;
 		}
-		
+
 		if (IsHousePrefab(info, LootHouse_TownE2I02.PREFAB))
 		{
 			QueueHouse(ent, "HOUSETOWNE2I02Y");
 			return true;
 		}
-		
+
 		if (IsHousePrefab(info, LootHouse_TownE2I02.PREFAB))
 		{
 			QueueHouse(ent, "HOUSETOWNE2I02V2");
 			return true;
 		}
-		
+
 		if (IsHousePrefab(info, LootHouse_TownE2I02.PREFAB))
 		{
 			QueueHouse(ent, "HOUSETOWNE2I02B");
 			return true;
 		}
-		
+
 		if (IsHousePrefab(info, LootHouse_TownE2I02.PREFAB))
 		{
 			QueueHouse(ent, "HOUSETOWNE2I02");
 			return true;
 		}
-		
+
 		if (IsHousePrefab(info, LootHouseRaG.PREFAB))
 		{
 			QueueHouse(ent, "HOUSERAG");
 			return true;
 		}
-		
+
 		if (IsHousePrefab(info, LootHouse08.PREFAB))
 		{
 			QueueHouse(ent, "HOUSE08");
 			return true;
 		}
-		
+
 		if (IsHousePrefab(info, LootHouse07.PREFAB))
 		{
 			QueueHouse(ent, "HOUSE07");
 			return true;
-		}		
+		}
 
 		if (IsHousePrefab(info, LootHouse06.PREFAB))
 		{
 			QueueHouse(ent, "HOUSE06");
 			return true;
 		}
-		
+
 		if (IsHousePrefab(info, LootHouse05_02.PREFAB))
 		{
 			QueueHouse(ent, "HOUSE05_02");
 			return true;
 		}
-		
+
 		if (IsHousePrefab(info, LootHouse05.PREFAB))
 		{
 			QueueHouse(ent, "HOUSE05");
@@ -204,6 +205,17 @@ class LootSpawner
 			return;
 		}
 
+		if (GetActiveLootItemCount() >= DynamicLootManager.MAX_ACTIVE_LOOT_ITEMS)
+		{
+			EnforceLootCap(DynamicLootManager.CurrentPlayerPositions);
+
+			if (GetActiveLootItemCount() >= DynamicLootManager.MAX_ACTIVE_LOOT_ITEMS)
+			{
+				Print("[Loot] Loot cap reached, delaying loot spawn for: " + houseType);
+				return;
+			}
+		}
+
 		int currentTime = System.GetTickCount();
 
 		if (data.LastDespawnTime > 0)
@@ -229,48 +241,153 @@ class LootSpawner
 
 		if (houseType == "HOUSEWOODE1I01_P")
 			LootHouse_WoodenE1I01_P.Spawn(house, data);
-		
+
 		if (houseType == "HOUSEWOODE1I01")
 			LootHouse_WoodenE1I01.Spawn(house, data);
-		
+
 		if (houseType == "HOUSEWOODE1I03")
 			LootHouse_WoodenE1I03.Spawn(house, data);
-		
+
 		if (houseType == "HOUSETOWNE2I02Y")
 			LootHouse_TownE2I02.Spawn(house, data);
-		
+
 		if (houseType == "HOUSETOWNE2I02V2")
 			LootHouse_TownE2I02.Spawn(house, data);
-		
+
 		if (houseType == "HOUSETOWNE2I02B")
-			LootHouse_TownE2I02.Spawn(house, data);		
-		
+			LootHouse_TownE2I02.Spawn(house, data);
+
 		if (houseType == "HOUSETOWNE2I02")
 			LootHouse_TownE2I02.Spawn(house, data);
-		
+
 		if (houseType == "HOUSERAG")
-			LootHouseRaG.Spawn(house, data);		
-		
+			LootHouseRaG.Spawn(house, data);
+
 		if (houseType == "HOUSE08")
 			LootHouse08.Spawn(house, data);
-		
+
 		if (houseType == "HOUSE07")
-			LootHouse07.Spawn(house, data);		
-		
+			LootHouse07.Spawn(house, data);
+
 		if (houseType == "HOUSE06")
 			LootHouse06.Spawn(house, data);
-		
+
 		if (houseType == "HOUSE05")
 			LootHouse05.Spawn(house, data);
 
 		if (houseType == "HOUSE05_02")
 			LootHouse05_02.Spawn(house, data);
-		
+
 		if (houseType == "HOUSE03")
 			LootHouse03.Spawn(house, data);
 
 		if (houseType == "HOUSE02")
 			LootHouse02.Spawn(house, data);
+
+		EnforceLootCap(DynamicLootManager.CurrentPlayerPositions);
+	}
+
+	static int GetActiveLootItemCount()
+	{
+		return ActiveLootItemCount;
+	}
+
+	static int RecountActiveLootItemCount()
+	{
+		ActiveLootItemCount = 0;
+
+		foreach (string key, SpawnedHouseLoot data : ActiveHouses)
+		{
+			if (!data || !data.IsSpawned)
+				continue;
+
+			foreach (IEntity item : data.Items)
+			{
+				if (item)
+					ActiveLootItemCount++;
+			}
+		}
+
+		return ActiveLootItemCount;
+	}
+
+	static void EnforceLootCap(array<vector> playerPositions)
+	{
+		if (DynamicLootManager.MAX_ACTIVE_LOOT_ITEMS <= 0)
+			return;
+
+		int activeLootCount = GetActiveLootItemCount();
+
+		while (activeLootCount > DynamicLootManager.MAX_ACTIVE_LOOT_ITEMS)
+		{
+			if (!DespawnOldestInactiveHouse(playerPositions))
+				return;
+
+			activeLootCount = GetActiveLootItemCount();
+		}
+	}
+
+	static bool DespawnOldestInactiveHouse(array<vector> playerPositions)
+	{
+		string oldestKey = "";
+		SpawnedHouseLoot oldestData = null;
+		int oldestNearbyTime = System.GetTickCount();
+
+		foreach (string key, SpawnedHouseLoot data : ActiveHouses)
+		{
+			if (!data || !data.IsSpawned)
+				continue;
+
+			if (DynamicLootManager.IsAnyPlayerNearPosition(data.HousePosition, playerPositions, DynamicLootManager.DESPAWN_DISTANCE))
+				continue;
+
+			int nearbyTime = data.LastPlayerNearbyTime;
+
+			if (nearbyTime <= 0)
+				nearbyTime = 0;
+
+			if (!oldestData || nearbyTime < oldestNearbyTime)
+			{
+				oldestKey = key;
+				oldestData = data;
+				oldestNearbyTime = nearbyTime;
+			}
+		}
+
+		if (!oldestData)
+			return false;
+
+		Print("[Loot] Loot cap reached, despawning oldest inactive house: " + oldestKey);
+		DespawnHouseLoot(oldestKey, oldestData);
+		return true;
+	}
+
+	static void DespawnHouseLoot(string key, SpawnedHouseLoot data)
+	{
+		if (!data || !data.IsSpawned)
+			return;
+
+		Print("[Loot] Despawning loot for house: " + key);
+
+		int deletedItems = 0;
+
+		foreach (IEntity item : data.Items)
+		{
+			if (item)
+			{
+				SCR_EntityHelper.DeleteEntityAndChildren(item);
+				deletedItems++;
+			}
+		}
+
+		ActiveLootItemCount -= deletedItems;
+
+		if (ActiveLootItemCount < 0)
+			ActiveLootItemCount = 0;
+
+		data.Items.Clear();
+		data.IsSpawned = false;
+		data.LastDespawnTime = System.GetTickCount();
 	}
 
 	static void SpawnWeightedFromArray(IEntity house, SpawnedHouseLoot data, array<vector> offsets, array<ref LootEntry> lootTable, float chance, string category, vector localAngles, float spread = 0.02)
@@ -291,7 +408,10 @@ class LootSpawner
 			IEntity item = SpawnWeightedLoot(worldPos, lootTable, house, localAngles);
 
 			if (item)
+			{
 				data.Items.Insert(item);
+				ActiveLootItemCount++;
+			}
 		}
 	}
 
@@ -313,7 +433,10 @@ class LootSpawner
 			IEntity item = SpawnLoot(worldPos, items, house, localAngles);
 
 			if (item)
+			{
 				data.Items.Insert(item);
+				ActiveLootItemCount++;
+			}
 		}
 	}
 

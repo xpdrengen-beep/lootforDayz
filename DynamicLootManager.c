@@ -2,13 +2,16 @@ class DynamicLootManager
 {
 	static bool Started = false;
 
-	static float CHECK_INTERVAL_MS = 5000;
+	static int CHECK_INTERVAL_MS = 5000;
 	static float SPAWN_DISTANCE = 100.0;
 	static float DESPAWN_DISTANCE = 130.0;
 	static float MIN_SPAWN_DISTANCE = 30.0;
 
-	static int RESPAWN_COOLDOWN_MS = 60000;       // 10 minutes
-	static int EMPTY_AREA_DESPAWN_MS = 60000;   // 3 hours
+	static int MAX_ACTIVE_LOOT_ITEMS = 4000;
+	static int RESPAWN_COOLDOWN_MS = 0;
+	static int EMPTY_AREA_DESPAWN_MS = 10800000;
+
+	static ref array<vector> CurrentPlayerPositions = new array<vector>();
 
 	static void Start()
 	{
@@ -19,7 +22,7 @@ class DynamicLootManager
 
 		Print("[Loot] Dynamic loot manager started.");
 
-		GetGame().GetCallqueue().CallLater(CheckPlayers, 5000, true);
+		GetGame().GetCallqueue().CallLater(CheckPlayers, CHECK_INTERVAL_MS, true);
 		GetGame().GetCallqueue().CallLater(CheckPlayers, 1000, false);
 	}
 
@@ -49,8 +52,16 @@ class DynamicLootManager
 			);
 		}
 
+		CurrentPlayerPositions.Clear();
+
+		foreach (vector playerPos : playerPositions)
+			CurrentPlayerPositions.Insert(playerPos);
+
+		LootSpawner.RecountActiveLootItemCount();
+
 		LootSpawner.FlushQueuedHouses();
 		CheckDespawn(playerPositions);
+		LootSpawner.EnforceLootCap(playerPositions);
 	}
 
 	static bool IsAnyPlayerTooClose(vector housePos)
@@ -81,18 +92,7 @@ class DynamicLootManager
 			if (!data || !data.IsSpawned)
 				continue;
 
-			bool playerNearby = false;
-
-			foreach (vector playerPos : playerPositions)
-			{
-				if (vector.Distance(playerPos, data.HousePosition) <= DESPAWN_DISTANCE)
-				{
-					playerNearby = true;
-					break;
-				}
-			}
-
-			if (playerNearby)
+			if (IsAnyPlayerNearPosition(data.HousePosition, playerPositions, DESPAWN_DISTANCE))
 			{
 				data.LastPlayerNearbyTime = currentTime;
 				continue;
@@ -104,17 +104,18 @@ class DynamicLootManager
 			if (currentTime - data.LastPlayerNearbyTime < EMPTY_AREA_DESPAWN_MS)
 				continue;
 
-			Print("[Loot] Despawning loot for abandoned house: " + key);
-
-			foreach (IEntity item : data.Items)
-			{
-				if (item)
-					SCR_EntityHelper.DeleteEntityAndChildren(item);
-			}
-
-			data.Items.Clear();
-			data.IsSpawned = false;
-			data.LastDespawnTime = currentTime;
+			LootSpawner.DespawnHouseLoot(key, data);
 		}
+	}
+
+	static bool IsAnyPlayerNearPosition(vector position, array<vector> playerPositions, float distance)
+	{
+		foreach (vector playerPos : playerPositions)
+		{
+			if (vector.Distance(playerPos, position) <= distance)
+				return true;
+		}
+
+		return false;
 	}
 }

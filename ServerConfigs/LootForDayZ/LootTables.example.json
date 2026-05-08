@@ -1,0 +1,58 @@
+{
+  "Enabled": true,
+  "Categories": [
+    {
+      "Category": "BED",
+      "Items": [
+        {
+          "Prefab": "{4B57C11AA5161760}Prefabs/Characters/Vests/Vest_PASGT/Vest_PASGT.et",
+          "Weight": 60
+        },
+        {
+          "Prefab": "{06B68C58B72EAAC6}Prefabs/Items/Equipment/Backpacks/Backpack_ALICE_Medium.et",
+          "Weight": 15
+        }
+      ]
+    },
+    {
+      "Category": "KITCHEN",
+      "Items": [
+        {
+          "Prefab": "{128A19AA9F731095}Prefabs/Items/Food/MeatLeg_01.et",
+          "Weight": 65
+        }
+      ]
+    },
+    {
+      "Category": "HOUSE06.KITCHEN",
+      "Items": [
+        {
+          "Prefab": "{128A19AA9F731095}Prefabs/Items/Food/MeatLeg_01.et",
+          "Weight": 65
+        }
+      ]
+    },
+    {
+      "Category": "WEAPON",
+      "Items": [
+        {
+          "Prefab": "{C1B4F7B87B720EE8}Prefabs/Weapons/Rifles/Mosin/BC_Rifle_Mosin_Nagant_9130.et",
+          "Weight": 15
+        },
+        {
+          "Prefab": "{6545DEABED4759E5}Prefabs/Weapons/Rifles/Mosin/BC_Rifle_Mosin_Nagant_9130_PU.et",
+          "Weight": 5
+        }
+      ]
+    },
+    {
+      "Category": "MEDICAL",
+      "Items": [
+        {
+          "Prefab": "{AC298BA8A7D27007}Prefabs/Items/Equipment/Backpacks/Backpack_Medical_Soviet_NoCross_01.et",
+          "Weight": 100
+        }
+      ]
+    }
+  ]
+}

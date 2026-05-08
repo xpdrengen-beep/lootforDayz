@@ -6,16 +6,6 @@ Use `LootTables.example.json` as a template for the server file:
 $profile:LootForDayZ/LootTables.json
 ```
 
-## Important
-
-JSON does not support real comments. The example file therefore uses safe README/example categories such as:
-
-```json
-{ "Category": "__README_WEIGHT_IS_RARITY_HIGHER_WEIGHT_MEANS_MORE_COMMON__", "Items": [] }
-```
-
-Empty `Items` categories are ignored by the addon loader.
-
 ## Enable the file
 
 Set:

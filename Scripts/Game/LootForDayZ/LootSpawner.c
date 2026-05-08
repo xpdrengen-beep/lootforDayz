@@ -14,6 +14,36 @@ class LootSpawner
 
 		string info = GetEntityPrefabName(ent);
 
+		if (IsHousePrefab(info, LootHouse_FarmHouseE1L01.PREFAB))
+		{
+			QueueHouse(ent, "FARMHOUSEE1L01");
+			return true;
+		}
+
+		if (IsHousePrefab(info, LootHouse_FarmHouseE1L01.PREFAB_GREEN))
+		{
+			QueueHouse(ent, "FARMHOUSEE1L01_GREEN");
+			return true;
+		}
+
+		if (IsHousePrefab(info, LootHouse_FarmHouseE1L01.PREFAB_WOOD))
+		{
+			QueueHouse(ent, "FARMHOUSEE1L01_WOOD");
+			return true;
+		}
+
+		if (IsHousePrefab(info, LootHouse_Brickbuilding01.PREFAB))
+		{
+			QueueHouse(ent, "BRICKBUILDING01");
+			return true;
+		}
+
+		if (IsHousePrefab(info, LootHouse_House2Floors01.PREFAB))
+		{
+			QueueHouse(ent, "HOUSE2FLOORS01");
+			return true;
+		}
+
 		if (IsHousePrefab(info, LootHouse_WoodenE1I01_P.PREFAB))
 		{
 			QueueHouse(ent, "HOUSEWOODE1I01_P");
@@ -32,19 +62,19 @@ class LootSpawner
 			return true;
 		}
 
-		if (IsHousePrefab(info, LootHouse_TownE2I02Y.PREFAB))
+		if (IsHousePrefab(info, LootHouse_TownE2I02.PREFAB))
 		{
 			QueueHouse(ent, "HOUSETOWNE2I02Y");
 			return true;
 		}
 
-		if (IsHousePrefab(info, LootHouse_TownE2I02V2.PREFAB))
+		if (IsHousePrefab(info, LootHouse_TownE2I02.PREFAB))
 		{
 			QueueHouse(ent, "HOUSETOWNE2I02V2");
 			return true;
 		}
 
-		if (IsHousePrefab(info, LootHouse_TownE2I02B.PREFAB))
+		if (IsHousePrefab(info, LootHouse_TownE2I02.PREFAB))
 		{
 			QueueHouse(ent, "HOUSETOWNE2I02B");
 			return true;
@@ -242,6 +272,21 @@ class LootSpawner
 
 		CurrentHouseType = houseType;
 
+		if (houseType == "FARMHOUSEE1L01")
+			LootHouse_FarmHouseE1L01.Spawn(house, data);
+
+		if (houseType == "FARMHOUSEE1L01_GREEN")
+			LootHouse_FarmHouseE1L01.Spawn(house, data);
+
+		if (houseType == "FARMHOUSEE1L01_WOOD")
+			LootHouse_FarmHouseE1L01.Spawn(house, data);
+
+		if (houseType == "BRICKBUILDING01")
+			LootHouse_Brickbuilding01.Spawn(house, data);
+
+		if (houseType == "HOUSE2FLOORS01")
+			LootHouse_House2Floors01.Spawn(house, data);
+
 		if (houseType == "HOUSEWOODE1I01_P")
 			LootHouse_WoodenE1I01_P.Spawn(house, data);
 
@@ -252,13 +297,13 @@ class LootSpawner
 			LootHouse_WoodenE1I03.Spawn(house, data);
 
 		if (houseType == "HOUSETOWNE2I02Y")
-			LootHouse_TownE2I02Y.Spawn(house, data);
+			LootHouse_TownE2I02.Spawn(house, data);
 
 		if (houseType == "HOUSETOWNE2I02V2")
-			LootHouse_TownE2I02V2.Spawn(house, data);
+			LootHouse_TownE2I02.Spawn(house, data);
 
 		if (houseType == "HOUSETOWNE2I02B")
-			LootHouse_TownE2I02B.Spawn(house, data);
+			LootHouse_TownE2I02.Spawn(house, data);
 
 		if (houseType == "HOUSETOWNE2I02")
 			LootHouse_TownE2I02.Spawn(house, data);

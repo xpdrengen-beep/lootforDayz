@@ -15,14 +15,18 @@ class DynamicLootManager
 
 	static void Start()
 	{
-		if (Started)
-			return;
+		GetGame().GetCallqueue().Remove(CheckPlayers);
 
-		Started = true;
-
-		Print("[Loot] Dynamic loot manager started.");
-
-		LootServerConfigManager.Load();
+		if (!Started)
+		{
+			Started = true;
+			Print("[Loot] Dynamic loot manager started.");
+			LootServerConfigManager.Load();
+		}
+		else
+		{
+			Print("[Loot] Dynamic loot manager scheduler refreshed.");
+		}
 
 		GetGame().GetCallqueue().CallLater(CheckPlayers, CHECK_INTERVAL_MS, true);
 		GetGame().GetCallqueue().CallLater(CheckPlayers, 1000, false);

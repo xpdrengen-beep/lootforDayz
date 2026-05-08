@@ -3,6 +3,7 @@ class LootSpawner
 	static ref map<string, ref SpawnedHouseLoot> ActiveHouses = new map<string, ref SpawnedHouseLoot>();
 	static ref array<IEntity> QueuedHouseEntities = new array<IEntity>();
 	static ref array<string> QueuedHouseTypes = new array<string>();
+	static ref array<string> QueuedHouseKeys = new array<string>();
 
 	static bool HouseCallback(IEntity ent)
 	{
@@ -98,14 +99,42 @@ class LootSpawner
 		if (!house || houseType == "")
 			return;
 
-		QueuedHouseEntities.Insert(house);
+		IEntity spawnHouse = GetHouseSpawnEntity(house, houseType);
+
+		if (!spawnHouse)
+			return;
+
+		string queueKey = spawnHouse.ToString() + houseType;
+
+		if (QueuedHouseKeys.Contains(queueKey))
+			return;
+
+		QueuedHouseEntities.Insert(spawnHouse);
 		QueuedHouseTypes.Insert(houseType);
+		QueuedHouseKeys.Insert(queueKey);
+	}
+
+	static IEntity GetHouseSpawnEntity(IEntity house, string houseType)
+	{
+		if (!house)
+			return null;
+
+		if (houseType == "HOUSEWOODE1I01" || houseType == "HOUSEWOODE1I01_P")
+		{
+			IEntity rootHouse = house.GetRootParent();
+
+			if (rootHouse)
+				return rootHouse;
+		}
+
+		return house;
 	}
 
 	static void ClearQueuedHouses()
 	{
 		QueuedHouseEntities.Clear();
 		QueuedHouseTypes.Clear();
+		QueuedHouseKeys.Clear();
 	}
 
 	static void FlushQueuedHouses()

@@ -50,21 +50,9 @@ class LootSpawner
 
 		string info = GetEntityPrefabName(ent);
 
-		if (IsHousePrefab(info, LootHouse_FarmHouseE1L01.PREFAB))
+		if (LootHouse_FarmHouseE1L01.IsPrefab(info))
 		{
 			QueueHouse(ent, "FARMHOUSEE1L01");
-			return true;
-		}
-
-		if (IsHousePrefab(info, LootHouse_FarmHouseE1L01.PREFAB_GREEN))
-		{
-			QueueHouse(ent, "FARMHOUSEE1L01_GREEN");
-			return true;
-		}
-
-		if (IsHousePrefab(info, LootHouse_FarmHouseE1L01.PREFAB_WOOD))
-		{
-			QueueHouse(ent, "FARMHOUSEE1L01_WOOD");
 			return true;
 		}
 

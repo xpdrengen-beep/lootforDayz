@@ -3,7 +3,49 @@ class LootHouse_FarmHouseE1L01
 	static string PREFAB = "{0E7899885A92BF4F}PrefabLibrary/DefaultLibrary/Structures/Houses/FarmHouse_E_1L01/FarmHouse_E_1L01.et";
 	static string PREFAB_GREEN = "{8A54FD8F840E3BC4}PrefabLibrary/DefaultLibrary/Structures/Houses/FarmHouse_E_1L01/FarmHouse_E_1L01_Green.et";
 	static string PREFAB_WOOD = "{9ACCDC76D1EBDA27}PrefabLibrary/DefaultLibrary/Structures/Houses/FarmHouse_E_1L01/FarmHouse_E_1L01_Wood.et";
+	static string PREFAB_USSR_WOOD = "{6D9DDD1D4910AC4F}Prefabs/Structures/Houses/Farm/FarmHouse_E_1L01/FarmHouse_USSR_1L01_Wood.et";
+	static string PREFAB_USSR_GREEN = "{D3CFBCBBAD783F7D}Prefabs/Structures/Houses/Farm/FarmHouse_E_1L01/FarmHouse_USSR_1L01_Green.et";
+	static string PREFAB_USSR = "{BC5385FAFA0D7754}Prefabs/Structures/Houses/Farm/FarmHouse_E_1L01/FarmHouse_USSR_1L01.et";
+	static string PREFAB_FARM_WOOD = "{18B2439FBF6CADFD}Prefabs/Structures/Houses/Farm/FarmHouse_E_1L01/FarmHouse_E_1L01_Wood.et";
+	static string PREFAB_FARM_GREEN = "{87D032F62D9FF82F}Prefabs/Structures/Houses/Farm/FarmHouse_E_1L01/FarmHouse_E_1L01_Green.et";
+	static string PREFAB_FARM_BASE = "{23ED22AC15AA9EE7}Prefabs/Structures/Houses/Farm/FarmHouse_E_1L01/FarmHouse_E_1L01_Base.et";
+	static string PREFAB_FARM = "{CD370ECB385DE67A}Prefabs/Structures/Houses/Farm/FarmHouse_E_1L01/FarmHouse_E_1L01.et";
 	static ref array<vector> BedSpawns;
+
+	static bool IsPrefab(string info)
+	{
+		if (LootSpawner.IsHousePrefab(info, PREFAB))
+			return true;
+
+		if (LootSpawner.IsHousePrefab(info, PREFAB_GREEN))
+			return true;
+
+		if (LootSpawner.IsHousePrefab(info, PREFAB_WOOD))
+			return true;
+
+		if (LootSpawner.IsHousePrefab(info, PREFAB_USSR_WOOD))
+			return true;
+
+		if (LootSpawner.IsHousePrefab(info, PREFAB_USSR_GREEN))
+			return true;
+
+		if (LootSpawner.IsHousePrefab(info, PREFAB_USSR))
+			return true;
+
+		if (LootSpawner.IsHousePrefab(info, PREFAB_FARM_WOOD))
+			return true;
+
+		if (LootSpawner.IsHousePrefab(info, PREFAB_FARM_GREEN))
+			return true;
+
+		if (LootSpawner.IsHousePrefab(info, PREFAB_FARM_BASE))
+			return true;
+
+		if (LootSpawner.IsHousePrefab(info, PREFAB_FARM))
+			return true;
+
+		return false;
+	}
 
 	static array<vector> GetBedSpawns()
 	{

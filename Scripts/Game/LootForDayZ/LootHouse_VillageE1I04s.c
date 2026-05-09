@@ -1,7 +1,43 @@
 class LootHouse_VillageE1I04s
 {
 	static string PREFAB = "{63352C2865C9C735}PrefabLibrary/DefaultLibrary/Structures/Houses/House_Village_E_1I04s.et";
+	static string PREFAB_T_GREEN = "{F874C1A05BB6FE2D}Prefabs/Structures/Houses/Village/House_Village_E_1I04/House_Village_E_1I04t_green.et";
+	static string PREFAB_T = "{2A0D72C46FDCD368}Prefabs/Structures/Houses/Village/House_Village_E_1I04/House_Village_E_1I04t.et";
+	static string PREFAB_SR_RED = "{9A87AD2E3BA2C7FA}Prefabs/Structures/Houses/Village/House_Village_E_1I04/House_Village_E_1I04sr_red.et";
+	static string PREFAB_SR = "{751E011171780C2E}Prefabs/Structures/Houses/Village/House_Village_E_1I04/House_Village_E_1I04sr.et";
+	static string PREFAB_SF_RED = "{4942F5A04C472230}Prefabs/Structures/Houses/Village/House_Village_E_1I04/House_Village_E_1I04sf_red.et";
+	static string PREFAB_SF_GREEN = "{9EC1D8CA0391BF16}Prefabs/Structures/Houses/Village/House_Village_E_1I04/House_Village_E_1I04sf_green.et";
+	static string PREFAB_SF = "{230EB641379A24C0}Prefabs/Structures/Houses/Village/House_Village_E_1I04/House_Village_E_1I04sf.et";
 	static ref array<vector> BedSpawns;
+
+	static bool IsPrefab(string info)
+	{
+		if (LootSpawner.IsHousePrefab(info, PREFAB))
+			return true;
+
+		if (LootSpawner.IsHousePrefab(info, PREFAB_T_GREEN))
+			return true;
+
+		if (LootSpawner.IsHousePrefab(info, PREFAB_T))
+			return true;
+
+		if (LootSpawner.IsHousePrefab(info, PREFAB_SR_RED))
+			return true;
+
+		if (LootSpawner.IsHousePrefab(info, PREFAB_SR))
+			return true;
+
+		if (LootSpawner.IsHousePrefab(info, PREFAB_SF_RED))
+			return true;
+
+		if (LootSpawner.IsHousePrefab(info, PREFAB_SF_GREEN))
+			return true;
+
+		if (LootSpawner.IsHousePrefab(info, PREFAB_SF))
+			return true;
+
+		return false;
+	}
 
 	static array<vector> GetBedSpawns()
 	{

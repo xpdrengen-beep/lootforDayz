@@ -80,7 +80,7 @@ class LootSpawner
 			return true;
 		}
 
-		if (IsHousePrefab(info, LootHouse_VillageE1I04s.PREFAB))
+		if (LootHouse_VillageE1I04s.IsPrefab(info))
 		{
 			QueueHouse(ent, "HOUSEVILLAGEE1I04S");
 			return true;
@@ -116,19 +116,31 @@ class LootSpawner
 			return true;
 		}
 
-		if (IsHousePrefab(info, LootHouse_TownE2I02.PREFAB))
+		if (IsHousePrefab(info, LootHouse_TownE2I01.PREFAB))
+		{
+			QueueHouse(ent, "HOUSETOWNE2I01");
+			return true;
+		}
+
+		if (IsHousePrefab(info, LootHouse_TownE2I01.PREFAB_ORANGE))
+		{
+			QueueHouse(ent, "HOUSETOWNE2I01_ORANGE");
+			return true;
+		}
+
+		if (IsHousePrefab(info, LootHouse_TownE2I02Y.PREFAB))
 		{
 			QueueHouse(ent, "HOUSETOWNE2I02Y");
 			return true;
 		}
 
-		if (IsHousePrefab(info, LootHouse_TownE2I02.PREFAB))
+		if (IsHousePrefab(info, LootHouse_TownE2I02V2.PREFAB))
 		{
 			QueueHouse(ent, "HOUSETOWNE2I02V2");
 			return true;
 		}
 
-		if (IsHousePrefab(info, LootHouse_TownE2I02.PREFAB))
+		if (IsHousePrefab(info, LootHouse_TownE2I02B.PREFAB))
 		{
 			QueueHouse(ent, "HOUSETOWNE2I02B");
 			return true;
@@ -201,7 +213,13 @@ class LootSpawner
 		if (!prefabData)
 			return "";
 
-		return prefabData.GetPrefabName();
+		ResourceName prefabName = prefabData.GetPrefabName();
+		string prefabPath = prefabName.GetPath();
+
+		if (prefabPath != "")
+			return prefabPath;
+
+		return prefabName;
 	}
 
 	static void QueueHouse(IEntity house, string houseType)
@@ -268,12 +286,32 @@ class LootSpawner
 		ClearQueuedHouses();
 	}
 
+	static string GetPrefabPath(string prefab)
+	{
+		int pathStart = prefab.IndexOf("}");
+
+		if (pathStart < 0)
+			return prefab;
+
+		pathStart++;
+
+		return prefab.Substring(pathStart, prefab.Length() - pathStart);
+	}
+
 	static bool IsHousePrefab(string info, string prefab)
 	{
-		if (prefab == "")
+		if (info == "" || prefab == "")
 			return false;
 
-		return info.Contains(prefab);
+		if (info.Contains(prefab))
+			return true;
+
+		string prefabPath = GetPrefabPath(prefab);
+
+		if (prefabPath == "")
+			return false;
+
+		return info.Contains(prefabPath);
 	}
 
 	static void TrySpawnHouse(IEntity house, string houseType)
@@ -368,14 +406,20 @@ class LootSpawner
 		if (houseType == "HOUSEWOODE1I03")
 			LootHouse_WoodenE1I03.Spawn(house, data);
 
+		if (houseType == "HOUSETOWNE2I01")
+			LootHouse_TownE2I01.Spawn(house, data);
+
+		if (houseType == "HOUSETOWNE2I01_ORANGE")
+			LootHouse_TownE2I01.Spawn(house, data);
+
 		if (houseType == "HOUSETOWNE2I02Y")
-			LootHouse_TownE2I02.Spawn(house, data);
+			LootHouse_TownE2I02Y.Spawn(house, data);
 
 		if (houseType == "HOUSETOWNE2I02V2")
-			LootHouse_TownE2I02.Spawn(house, data);
+			LootHouse_TownE2I02V2.Spawn(house, data);
 
 		if (houseType == "HOUSETOWNE2I02B")
-			LootHouse_TownE2I02.Spawn(house, data);
+			LootHouse_TownE2I02B.Spawn(house, data);
 
 		if (houseType == "HOUSETOWNE2I02")
 			LootHouse_TownE2I02.Spawn(house, data);

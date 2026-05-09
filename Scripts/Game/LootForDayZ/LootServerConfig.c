@@ -25,11 +25,33 @@ class LootServerConfigCategory : JsonApiStruct
 class LootServerConfigFile : JsonApiStruct
 {
 	bool Enabled = false;
+	bool DebugLogging = false;
+	int CheckIntervalMs = 5000;
+	float SpawnDistance = 100.0;
+	float DespawnDistance = 130.0;
+	float MinSpawnDistance = 30.0;
+	int MaxActiveLootItems = 4000;
+	int RespawnCooldownMs = 0;
+	int EmptyAreaDespawnMs = 10800000;
+	int RecountIntervalMs = 60000;
+	int InactiveHousePruneMs = 3600000;
+	int MaxHousesToSpawnPerFlush = 0;
 	ref array<ref LootServerConfigCategory> Categories = new array<ref LootServerConfigCategory>();
 
 	void LootServerConfigFile()
 	{
 		RegV("Enabled");
+		RegV("DebugLogging");
+		RegV("CheckIntervalMs");
+		RegV("SpawnDistance");
+		RegV("DespawnDistance");
+		RegV("MinSpawnDistance");
+		RegV("MaxActiveLootItems");
+		RegV("RespawnCooldownMs");
+		RegV("EmptyAreaDespawnMs");
+		RegV("RecountIntervalMs");
+		RegV("InactiveHousePruneMs");
+		RegV("MaxHousesToSpawnPerFlush");
 		RegV("Categories");
 	}
 }
@@ -65,6 +87,8 @@ class LootServerConfigManager
 			Print("[Loot] Failed to load loot config, using hardcoded loot tables: " + CONFIG_PATH);
 			return;
 		}
+
+		ApplyRuntimeSettings(config);
 
 		Enabled = config.Enabled;
 
@@ -117,6 +141,44 @@ class LootServerConfigManager
 			return fallbackTable;
 
 		return configuredTable;
+	}
+
+	static void ApplyRuntimeSettings(LootServerConfigFile config)
+	{
+		if (!config)
+			return;
+
+		LootSpawner.DEBUG_LOGGING = config.DebugLogging;
+
+		if (config.CheckIntervalMs > 0)
+			DynamicLootManager.CHECK_INTERVAL_MS = config.CheckIntervalMs;
+
+		if (config.SpawnDistance > 0)
+			DynamicLootManager.SPAWN_DISTANCE = config.SpawnDistance;
+
+		if (config.DespawnDistance > 0)
+			DynamicLootManager.DESPAWN_DISTANCE = config.DespawnDistance;
+
+		if (config.MinSpawnDistance >= 0)
+			DynamicLootManager.MIN_SPAWN_DISTANCE = config.MinSpawnDistance;
+
+		if (config.MaxActiveLootItems >= 0)
+			DynamicLootManager.MAX_ACTIVE_LOOT_ITEMS = config.MaxActiveLootItems;
+
+		if (config.RespawnCooldownMs >= 0)
+			DynamicLootManager.RESPAWN_COOLDOWN_MS = config.RespawnCooldownMs;
+
+		if (config.EmptyAreaDespawnMs >= 0)
+			DynamicLootManager.EMPTY_AREA_DESPAWN_MS = config.EmptyAreaDespawnMs;
+
+		if (config.RecountIntervalMs > 0)
+			DynamicLootManager.RECOUNT_INTERVAL_MS = config.RecountIntervalMs;
+
+		if (config.InactiveHousePruneMs >= 0)
+			DynamicLootManager.INACTIVE_HOUSE_PRUNE_MS = config.InactiveHousePruneMs;
+
+		if (config.MaxHousesToSpawnPerFlush >= 0)
+			LootSpawner.MAX_HOUSES_TO_SPAWN_PER_FLUSH = config.MaxHousesToSpawnPerFlush;
 	}
 
 	static void CreateDefaultConfigFile()

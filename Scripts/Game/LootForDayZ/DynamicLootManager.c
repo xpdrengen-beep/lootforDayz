@@ -10,8 +10,11 @@ class DynamicLootManager
 	static int MAX_ACTIVE_LOOT_ITEMS = 4000;
 	static int RESPAWN_COOLDOWN_MS = 0;
 	static int EMPTY_AREA_DESPAWN_MS = 10800000;
+	static int RECOUNT_INTERVAL_MS = 60000;
+	static int INACTIVE_HOUSE_PRUNE_MS = 3600000;
 
 	static ref array<vector> CurrentPlayerPositions = new array<vector>();
+	static int LastRecountTime = 0;
 
 	static void Start()
 	{
@@ -63,11 +66,23 @@ class DynamicLootManager
 		foreach (vector playerPos : playerPositions)
 			CurrentPlayerPositions.Insert(playerPos);
 
-		LootSpawner.RecountActiveLootItemCount();
+		MaybeRecountActiveLootItemCount();
 
 		LootSpawner.FlushQueuedHouses();
 		CheckDespawn(playerPositions);
+		LootSpawner.PruneInactiveHouses(playerPositions);
 		LootSpawner.EnforceLootCap(playerPositions);
+	}
+
+	static void MaybeRecountActiveLootItemCount()
+	{
+		int currentTime = System.GetTickCount();
+
+		if (LastRecountTime > 0 && currentTime - LastRecountTime < RECOUNT_INTERVAL_MS)
+			return;
+
+		LastRecountTime = currentTime;
+		LootSpawner.RecountActiveLootItemCount();
 	}
 
 	static bool IsAnyPlayerTooClose(vector housePos)

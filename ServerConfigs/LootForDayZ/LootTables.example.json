@@ -1,5 +1,16 @@
 {
   "Enabled": true,
+  "DebugLogging": false,
+  "CheckIntervalMs": 5000,
+  "SpawnDistance": 100.0,
+  "DespawnDistance": 130.0,
+  "MinSpawnDistance": 30.0,
+  "MaxActiveLootItems": 4000,
+  "RespawnCooldownMs": 0,
+  "EmptyAreaDespawnMs": 10800000,
+  "RecountIntervalMs": 60000,
+  "InactiveHousePruneMs": 3600000,
+  "MaxHousesToSpawnPerFlush": 0,
   "Categories": [
     {
       "Category": "BED",

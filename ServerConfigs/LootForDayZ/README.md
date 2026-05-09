@@ -94,6 +94,46 @@ Example:
 
 The common gun is much more likely than the rare gun. Weight does not control how many items spawn; house spawn chances control item amount.
 
+
+## Runtime / performance settings
+
+The JSON file can also tune the dynamic loot manager without rebuilding the addon:
+
+```json
+{
+  "DebugLogging": false,
+  "CheckIntervalMs": 5000,
+  "SpawnDistance": 100.0,
+  "DespawnDistance": 130.0,
+  "MinSpawnDistance": 30.0,
+  "MaxActiveLootItems": 4000,
+  "RespawnCooldownMs": 0,
+  "EmptyAreaDespawnMs": 10800000,
+  "RecountIntervalMs": 60000,
+  "InactiveHousePruneMs": 3600000,
+  "MaxHousesToSpawnPerFlush": 0
+}
+```
+
+Notes:
+
+- `DebugLogging` controls verbose spawn/despawn logging. Failed prefab loads are still printed.
+- `RecountIntervalMs` controls how often the active loot counter is rebuilt as a safety check. Spawn/despawn still updates the counter immediately.
+- `InactiveHousePruneMs` removes old inactive house records after despawn so long-running servers do not keep every visited house forever. Set to `0` to disable pruning.
+- `MaxHousesToSpawnPerFlush` limits how many queued houses can spawn in one manager tick. The default `0` keeps the old behavior and processes the full queue, so loot availability is unchanged unless server owners opt in to spawn budgeting.
+
+Recommended high-pop starting point:
+
+```json
+{
+  "DebugLogging": false,
+  "MaxActiveLootItems": 2500,
+  "RespawnCooldownMs": 1800000,
+  "EmptyAreaDespawnMs": 1800000,
+  "MaxHousesToSpawnPerFlush": 8
+}
+```
+
 ## Current house type names
 
 Use these names before the dot for house-specific tables:

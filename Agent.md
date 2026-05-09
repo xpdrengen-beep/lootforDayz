@@ -1,3 +1,6 @@
+# LootForDayZ instructions
+
+
 When adding new house loot spawn classes:
 - Always group coordinates by loot category: BED, KITCHEN, WEAPON, MEDICAL, TOOL.
 - TOOL spawn points should be stored but not spawned unless tool loot support is explicitly requested.

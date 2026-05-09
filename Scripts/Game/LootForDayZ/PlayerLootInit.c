@@ -4,14 +4,15 @@ modded class SCR_ChimeraCharacter
 	{
 		super.EOnInit(owner);
 
-		Print("PLAYER INIT");
-
 		GetGame().GetCallqueue().CallLater(StartLootSystem, 3000, false);
 	}
 
 	void StartLootSystem()
 	{
-		Print("STARTING DYNAMIC LOOT");
+		if (Replication.IsRunning() && !Replication.IsServer())
+			return;
+
+		LootSpawner.DebugPrint("STARTING DYNAMIC LOOT");
 		DynamicLootManager.Start();
 	}
 }

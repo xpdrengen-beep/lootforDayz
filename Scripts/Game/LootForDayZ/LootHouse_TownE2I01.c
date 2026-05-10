@@ -2,6 +2,7 @@ class LootHouse_TownE2I01
 {
 	static string PREFAB = "{38A5F3E4578087AB}Prefabs/Structures/Houses/Town/House_Town_E_2I01/House_Town_E_2I01.et";
 	static string PREFAB_ORANGE = "{C50CF821412A2E0F}Prefabs/Structures/Houses/Town/House_Town_E_2I01/House_Town_E_2I01_orange.et";
+	static string PREFAB_LIBRARY = "{5B4099F8DD30CD3E}PrefabLibrary/DefaultLibrary/Structures/Houses/House_Town_E_2I01.et";
 	static ref array<vector> BedSpawns;
 
 	static array<vector> GetBedSpawns()

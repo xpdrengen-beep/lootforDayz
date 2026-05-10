@@ -116,6 +116,18 @@ class LootSpawner
 			return true;
 		}
 
+		if (IsHousePrefab(info, LootHouse_TownE2I01.PREFAB_LIBRARY))
+		{
+			QueueHouse(ent, "HOUSETOWNE2I01");
+			return true;
+		}
+
+		if (IsHousePrefab(info, LootHouse_TownE2I03.PREFAB))
+		{
+			QueueHouse(ent, "HOUSETOWNE2I03");
+			return true;
+		}
+
 		if (IsHousePrefab(info, LootHouse_TownE2I02Y.PREFAB))
 		{
 			QueueHouse(ent, "HOUSETOWNE2I02Y");
@@ -399,6 +411,9 @@ class LootSpawner
 
 		if (houseType == "HOUSETOWNE2I01_ORANGE")
 			LootHouse_TownE2I01.Spawn(house, data);
+
+		if (houseType == "HOUSETOWNE2I03")
+			LootHouse_TownE2I03.Spawn(house, data);
 
 		if (houseType == "HOUSETOWNE2I02Y")
 			LootHouse_TownE2I02Y.Spawn(house, data);

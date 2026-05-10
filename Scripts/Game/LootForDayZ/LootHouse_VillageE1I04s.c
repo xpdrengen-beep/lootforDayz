@@ -8,6 +8,8 @@ class LootHouse_VillageE1I04s
 	static string PREFAB_SF_RED = "{4942F5A04C472230}Prefabs/Structures/Houses/Village/House_Village_E_1I04/House_Village_E_1I04sf_red.et";
 	static string PREFAB_SF_GREEN = "{9EC1D8CA0391BF16}Prefabs/Structures/Houses/Village/House_Village_E_1I04/House_Village_E_1I04sf_green.et";
 	static string PREFAB_SF = "{230EB641379A24C0}Prefabs/Structures/Houses/Village/House_Village_E_1I04/House_Village_E_1I04sf.et";
+	static string PREFAB_LIBRARY_SF_GREEN = "{F973FD2C8F3C05DB}PrefabLibrary/DefaultLibrary/Structures/Houses/House_Village_E_1I04sf/House_Village_E_1I04sf_green.et";
+	static string PREFAB_LIBRARY_SF_RED = "{A4BB44B5826C63F2}PrefabLibrary/DefaultLibrary/Structures/Houses/House_Village_E_1I04sf/House_Village_E_1I04sf_red.et";
 	static ref array<vector> BedSpawns;
 
 	static bool IsPrefab(string info)
@@ -34,6 +36,12 @@ class LootHouse_VillageE1I04s
 			return true;
 
 		if (LootSpawner.IsHousePrefab(info, PREFAB_SF))
+			return true;
+
+		if (LootSpawner.IsHousePrefab(info, PREFAB_LIBRARY_SF_GREEN))
+			return true;
+
+		if (LootSpawner.IsHousePrefab(info, PREFAB_LIBRARY_SF_RED))
 			return true;
 
 		return false;

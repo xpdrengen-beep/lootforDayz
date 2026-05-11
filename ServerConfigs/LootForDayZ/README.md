@@ -198,7 +198,7 @@ HOUSE05_02.MEDICAL
 The zombie scripts live under:
 
 ```text
-Scripts/Game/LootForDayZ/zmLootFordayz
+Scripts/Game/zmLootFordayz
 ```
 
 The first zombie prototype uses Workbench-placed zone entities instead of JSON

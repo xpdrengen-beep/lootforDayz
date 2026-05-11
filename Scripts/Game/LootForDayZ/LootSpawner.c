@@ -62,6 +62,12 @@ class LootSpawner
 			return true;
 		}
 
+		if (IsHousePrefab(info, LootHouse_ApartmentBuildingUSSR2I02Green.PREFAB))
+		{
+			QueueHouse(ent, "APARTMENTBUILDINGUSSR2I02_GREEN");
+			return true;
+		}
+
 		if (IsHousePrefab(info, LootHouse_House2Floors01.PREFAB))
 		{
 			QueueHouse(ent, "HOUSE2FLOORS01");
@@ -83,6 +89,12 @@ class LootSpawner
 		if (IsHousePrefab(info, LootHouse_VillageE1I05.PREFAB_T))
 		{
 			QueueHouse(ent, "HOUSEVILLAGEE1I05T");
+			return true;
+		}
+
+		if (IsHousePrefab(info, LootHouse_VillageE1I06.PREFAB))
+		{
+			QueueHouse(ent, "HOUSEVILLAGEE1I06");
 			return true;
 		}
 
@@ -385,6 +397,9 @@ class LootSpawner
 		if (houseType == "BRICKBUILDING01")
 			LootHouse_Brickbuilding01.Spawn(house, data);
 
+		if (houseType == "APARTMENTBUILDINGUSSR2I02_GREEN")
+			LootHouse_ApartmentBuildingUSSR2I02Green.Spawn(house, data);
+
 		if (houseType == "HOUSE2FLOORS01")
 			LootHouse_House2Floors01.Spawn(house, data);
 
@@ -396,6 +411,9 @@ class LootSpawner
 
 		if (houseType == "HOUSEVILLAGEE1I05T")
 			LootHouse_VillageE1I05.Spawn(house, data);
+
+		if (houseType == "HOUSEVILLAGEE1I06")
+			LootHouse_VillageE1I06.Spawn(house, data);
 
 		if (houseType == "HOUSEWOODE1I01_P")
 			LootHouse_WoodenE1I01_P.Spawn(house, data);

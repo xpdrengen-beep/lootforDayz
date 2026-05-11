@@ -68,6 +68,12 @@ class LootSpawner
 			return true;
 		}
 
+		if (IsHousePrefab(info, LootHouse_ApartmentBuildingUSSR2I02Yellow.PREFAB))
+		{
+			QueueHouse(ent, "APARTMENTBUILDINGUSSR2I02_YELLOW");
+			return true;
+		}
+
 		if (IsHousePrefab(info, LootHouse_House2Floors01.PREFAB))
 		{
 			QueueHouse(ent, "HOUSE2FLOORS01");
@@ -399,6 +405,9 @@ class LootSpawner
 
 		if (houseType == "APARTMENTBUILDINGUSSR2I02_GREEN")
 			LootHouse_ApartmentBuildingUSSR2I02Green.Spawn(house, data);
+
+		if (houseType == "APARTMENTBUILDINGUSSR2I02_YELLOW")
+			LootHouse_ApartmentBuildingUSSR2I02Yellow.Spawn(house, data);
 
 		if (houseType == "HOUSE2FLOORS01")
 			LootHouse_House2Floors01.Spawn(house, data);

@@ -192,3 +192,121 @@ HOUSE07.BED
 HOUSE06.KITCHEN
 HOUSE05_02.MEDICAL
 ```
+
+## Workbench zombie zones
+
+The zombie scripts live under:
+
+```text
+Scripts/Game/LootForDayZ/zmLootFordayz
+```
+
+The first zombie prototype uses Workbench-placed zone entities instead of JSON
+coordinates. Zones automatically try multiple random positions and reject spots
+that are too close to players or nearby objects.
+
+1. Create/place an entity using the `LFZ_ZombieZoneEntity` script class.
+2. Put the entity at the center of the town, village, or military area.
+3. Set `ZoneName` to a unique readable name.
+4. Set `ZoneType` to `Village`, `Town`, or `Military`.
+5. Set `Radius` to the playable zombie area size.
+6. Set `ZombiePrefab` to an unarmed standard character prefab while the zombie
+   behaviour is still being prototyped.
+7. Optional: override `MinZombies`, `MaxZombies`, `RespawnCooldownMs`,
+   `ObjectClearanceRadius`, and `SpawnPositionAttempts` per zone. Leave zombie
+   counts at `0` to use the defaults below.
+8. Optional fallback only: set `UseSpawnPoints` to true if a special zone should
+   prefer manual `LFZ_ZombieSpawnPointEntity` positions before automatic random
+   positions.
+
+Default zone difficulty values:
+
+```text
+Village:  3-6 zombies
+Town:     5-10 zombies
+Military: 8-14 zombies
+```
+
+Runtime manager defaults:
+
+```text
+CheckIntervalMs:      5000
+MinSpawnDistance:    45.0
+DespawnDistance:     350.0
+EmptyAreaDespawnMs:  900000
+MaxActiveZombies:    120
+SpawnPositionAttempts: 48
+```
+
+The manager only evaluates registered `LFZ_ZombieZoneEntity` instances on the
+server. A zone becomes active when a player is inside `Radius + ActivationBuffer`.
+Zombies spawn automatically at random positions inside the zone radius. Each
+zone tries up to `SpawnPositionAttempts` candidates, and individual attempts are
+skipped when the selected position is too close to a player or when the
+`ObjectClearanceRadius` sphere overlaps another render/object entity. Set
+`ObjectClearanceRadius` to `0` on a zone if object checks are too conservative
+for clutter-heavy areas.
+
+### Automatic object-aware spawning
+
+Manual spawn points are not required. By default, the spawner ignores registered
+`LFZ_ZombieSpawnPointEntity` instances and uses automatic random placement inside
+the zone. Automatic placement works like this:
+
+1. pick a random candidate inside the zone radius;
+2. reject it if a player is inside `MinSpawnDistance`;
+3. reject it if a `QueryEntitiesBySphere` object query hits a render/object
+   entity inside `ObjectClearanceRadius`;
+4. retry until `SpawnPositionAttempts` is reached.
+
+For dense towns, increase `SpawnPositionAttempts` before adding manual points.
+Manual `LFZ_ZombieSpawnPointEntity` positions are now a special-case fallback:
+set `UseSpawnPoints` to true on a zone only if a hand-authored area needs exact
+spawn spots.
+
+### Object-aware zombie spawning
+
+The script performs a lightweight runtime object check before spawning each
+zombie. For every automatic random candidate position, `ZombieSpawner` checks:
+
+1. the position is not inside `MinSpawnDistance` of any player; and
+2. a sphere query around the candidate does not hit a render/object entity inside
+   the zone's `ObjectClearanceRadius`.
+
+This prevents many bad spawns inside placed props, buildings, fences, vehicles,
+and other runtime entities. It is not a full replacement for navmesh generation:
+large buildings can still have origins or collision bounds that do not perfectly
+match their walkable/blocked space, and AI movement still depends on a valid
+`SCR_AIWorld` plus `Soldiers` navmesh. For the most reliable DayZ-like infected
+setup, use all three together: valid navmesh, object clearance, and carefully
+placed zombie zones.
+
+### Target worlds without `SCR_AIWorld`
+
+Zombie zones require the target world to have an AI world/navmesh setup. If the
+world you are building on does not already contain `SCR_AIWorld`, the zombie
+manager can still spawn character prefabs, but normal AI navigation will not work
+until the world has a valid `SCR_AIWorld` entity with `NavmeshWorldComponent`
+configuration.
+
+Recommended Workbench setup for a world that is not yours:
+
+1. Create a modded/inherited version or editable layer of the target world in
+   your project; do not edit the original dependency directly.
+2. Add the `SCR_AIWorld.et` prefab to the world's default/editable layer. Only
+   one AI world should exist per loaded world.
+3. Configure the first `NavmeshWorldComponent` for `Soldiers`; this is the
+   navmesh project used by on-foot AI such as the first zombie prototypes.
+4. Create or assign the `Soldiers` navmesh file/config (`.nmn` through a
+   navmesh files config).
+5. Generate and save a navmesh for the areas where zombies should walk. For
+   small custom maps, full generation can be acceptable; for large dependency
+   maps, generate only the changed/needed area and ship that navmesh data in
+   your modded world setup.
+6. Reload the world and verify the `Soldiers` navmesh is visible under your
+   zombie zones before testing zombie movement in-game.
+
+If you cannot add `SCR_AIWorld` or a `Soldiers` navmesh to the loaded world, the
+current zombie system should be treated as spawn/despawn-only for that world; the
+spawned characters will not have reliable pathfinding for DayZ-like infected
+behaviour.

@@ -195,6 +195,12 @@ HOUSE05_02.MEDICAL
 
 ## Workbench zombie zones
 
+The zombie scripts live under:
+
+```text
+Scripts/Game/LootForDayZ/zmLootFordayz
+```
+
 The first zombie prototype uses Workbench-placed zone entities instead of JSON
 coordinates. Zones automatically try multiple random positions and reject spots
 that are too close to players or nearby objects.

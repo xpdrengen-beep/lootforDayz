@@ -14,5 +14,6 @@ modded class SCR_ChimeraCharacter
 
 		LootSpawner.DebugPrint("STARTING DYNAMIC LOOT");
 		DynamicLootManager.Start();
+		DynamicZombieManager.Start();
 	}
 }

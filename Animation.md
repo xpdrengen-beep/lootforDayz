@@ -269,6 +269,14 @@ Alerted && !HasScreamed
 
 `Hit` er en one-shot reaction state. Den skal kunne afbryde normal locomotion/scream/attack, men den skal ikke loope. Den bør efterfølgende vælge korrekt locomotion-state baseret på `Speed`.
 
+Det vigtigste er at tænke `Hit` som et kort interrupt:
+
+```text
+Locomotion/Scream/Attack --WasHit--> Hit --HitDone + Speed--> Idle/Walk/Run
+```
+
+Undgå at lade `WasHit` være en permanent state som fx `true` så længe zombien har damage. Det skal være en kort trigger/command, ellers vil State Machine evaluere transitions fra den aktive state igen og igen og hoppe tilbage i `Hit`.
+
 ### 1. Source node
 
 Opret eller kontrollér:
@@ -308,9 +316,11 @@ HitDone : bool
 
 `WasHit` bør behandles som one-shot trigger. Den må ikke stå `true` permanent, ellers kan graphen blive ved med at gå tilbage til `Hit`.
 
+`HitDone` kan i første version være en manuel test-bool. Når du vil gøre det mere automatisk, kan du erstatte/understøtte den med en time-baseret condition, fx en funktion der først bliver true tæt på slutningen af child-animationen. Hvis transition-condition bruger animationstid/remaining time, så slå `Post Eval` til på den transition.
+
 ### 4. Indgange til Hit
 
-Start med få transitions, ikke alle på én gang:
+Start med få transitions, ikke alle på én gang. En State Machine evaluerer transitions ud fra den aktive state, så det er nemmere at fejlfinde, hvis du først kun forbinder `Idle`, `Walk` og `Run` til `Hit`:
 
 ```text
 Idle -> Hit
@@ -353,6 +363,8 @@ Beslut senere om `Hit` må afbryde `Attack`; nogle zombier bør færdiggøre att
 
 Brug samme ide som `Scream`: `Hit` skal ikke altid gå til Walk. Den skal vælge baseret på `Speed`.
 
+Vigtigt: undgå gaps i speed-reglerne. Med nedenstående regler vil `Speed = 0.08` ikke matche nogen exit, fordi `Idle` stopper ved `<= 0.05`, og `Walk` starter ved `> 0.1`. Det er fint, hvis du aldrig bruger mellemværdien i test, men til et robust setup bør du enten clamp'e testværdierne eller bruge en fuldt dækkende exit-regel som `Hit -> Walk: HitDone && Speed > 0.05 && Speed <= 0.75`.
+
 ```text
 Hit -> Idle
 Condition: HitDone && Speed <= 0.05
@@ -384,6 +396,53 @@ Til test:
 6. Sæt `HitDone=true`.
 7. Bekræft korrekt exit.
 8. Sæt `HitDone=false` bagefter.
+
+### 5.1 Hurtig fejlsøgnings-checkliste for Hit
+
+Hvis `Hit` ikke opfører sig rigtigt, så tjek i denne rækkefølge:
+
+```text
+[ ] SRC_Hit spiller korrekt alene i preview.
+[ ] Source path er præcis Combat.Normal.Hit, inkl. store/små bogstaver.
+[ ] SRC_Hit looptype er Once / No Loop, ikke Loop.
+[ ] Hit-state har Child = SRC_Hit.
+[ ] Hit-state har Time Storage = Normalized Time.
+[ ] Transition Duration er decimal, fx 0.1 eller 0.2, ikke 0 eller 1.
+[ ] WasHit sættes kun kortvarigt true og derefter false.
+[ ] HitDone bliver først true, når hit-animationen skal forlade state.
+[ ] Exit-reglerne dækker den Speed-værdi, du tester med.
+[ ] Death-transitions har højere prioritet end Hit, når Death senere tilføjes.
+```
+
+Typiske symptomer:
+
+```text
+Hit starter igen og igen      -> WasHit står stadig true.
+Hit bliver aldrig færdig      -> HitDone bliver aldrig true, eller speed-exit matcher ikke.
+Hit looper visuelt            -> SRC_Hit står til Loop i stedet for Once / No Loop.
+Hit skifter for brat          -> Duration er for lav; prøv 0.1-0.2.
+Hit reagerer for langsomt     -> Indgangs-transition Duration er for høj; prøv 0.05-0.1.
+Death taber til Hit senere    -> Death mangler højere prioritet/overrule.
+```
+
+### 5.2 Anbefalet første testmatrix
+
+Kør disse scenarier én ad gangen i Workbench, og nulstil `WasHit`/`HitDone` mellem hver test:
+
+```text
+Idle, Speed=0.0, WasHit=true  -> Hit -> HitDone=true -> Idle
+Walk, Speed=0.3, WasHit=true  -> Hit -> HitDone=true -> Walk
+Run,  Speed=1.0, WasHit=true  -> Hit -> HitDone=true -> Run
+```
+
+Når de tre virker, kan du teste interrupts:
+
+```text
+Scream, WasHit=true -> Hit -> exit efter Speed
+Attack, WasHit=true -> Hit -> exit efter Speed
+```
+
+Hvis `Attack -> Hit` føles forkert gameplaymæssigt, så vent med den transition og lad attack-animationen færdiggøre i stedet.
 
 ### 6. Death skal senere overrule Hit
 

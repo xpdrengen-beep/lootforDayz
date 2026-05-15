@@ -407,3 +407,19 @@ Hvis `IsDead=true`, skal graphen gå til `Death`, selv hvis `WasHit=true`, `DoSc
 ## Reminder om animation graph vs AI
 
 Animation Graph bestemmer kun, hvilken animation zombien spiller. Den bestemmer ikke navmesh/pathfinding. Roaming, target detection og navigation skal komme fra DayZ AI/CE/scripts. Graphen skal reagere på AI-signaler som movement speed, alerted, attack, hit og dead.
+
+## Nuværende graph-diagram
+
+Et opdateret visuelt diagram af den anbefalede `SM_ZombieMain`-opsætning ligger her:
+
+```text
+docs/zombie_animation_graph_current.svg
+```
+
+Diagrammet viser:
+
+- `SM_ZombieMain` som default/root State Machine.
+- De nuværende states: `Idle`, `Scream`, `Walk`, `Run`.
+- De kommende combat states: `Attack`, `Hit`, `Death`.
+- Child/source mapping for hver state.
+- De fungerende locomotion- og scream-transitions med decimal `Duration`-værdier.

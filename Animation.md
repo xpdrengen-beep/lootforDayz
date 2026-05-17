@@ -407,3 +407,90 @@ Hvis `IsDead=true`, skal graphen gå til `Death`, selv hvis `WasHit=true`, `DoSc
 ## Reminder om animation graph vs AI
 
 Animation Graph bestemmer kun, hvilken animation zombien spiller. Den bestemmer ikke navmesh/pathfinding. Roaming, target detection og navigation skal komme fra DayZ AI/CE/scripts. Graphen skal reagere på AI-signaler som movement speed, alerted, attack, hit og dead.
+
+## Script integration added
+
+Der er nu tilføjet en animation-controller component til zombie-prefabs:
+
+```text
+Scripts/Game/LootForDayZ/zmLootFordayz/LFZ_ZombieAnimControllerComponent.c
+Scripts/Game/zmLootFordayz/LFZ_ZombieAnimControllerComponent.c
+```
+
+Begge placeringer er holdt ens, fordi projektet i øjeblikket har samme zombie-scriptmappe både under `Scripts/Game/LootForDayZ/zmLootFordayz` og `Scripts/Game/zmLootFordayz`.
+
+Componenten bruger Bohemias `CharacterAnimGraphComponent` API-mønster:
+
+```text
+BindBoolVariable
+BindFloatVariable
+SetBoolVariable
+SetFloatVariable
+```
+
+og binder disse graph variables med præcis samme navne som i Animation Graph:
+
+```text
+DoScream
+ScreamDone
+GoWalk
+Speed
+DoAttack
+AttackDone
+IsDead
+WasHit
+HitDone
+```
+
+### Sådan bruges componenten i Workbench
+
+1. Åbn zombie-prefabben i Workbench.
+2. Kontrollér at prefabben har en `CharacterAnimGraphComponent`, der peger på den fungerende zombie animation graph / anim set instance.
+3. Tilføj `LFZ_ZombieAnimControllerComponent` på samme entity som `CharacterAnimGraphComponent`.
+4. Lad `UseFallbackTimers` være slået fra, hvis animation events senere skal styre `FinishAttack`, `FinishHit` og `FinishScream`.
+5. Slå `UseFallbackTimers` til midlertidigt, hvis du vil teste uden animation events. Så kalder componenten selv finish-metoder efter `AttackDurationMs`, `HitDurationMs` og `ScreamDurationMs`.
+
+### Public methods til gameplay/AI
+
+AI, damage-system eller midlertidige debug-kald kan styre graphen via:
+
+```text
+SetMovement(float speed, bool goWalk)
+StartAttack()
+FinishAttack()
+StartHit()
+FinishHit()
+StartScream()
+FinishScream()
+Die()
+SetDead(bool isDead)
+ResetAnimationState()
+IsReady()
+```
+
+Anbefalet første test i script/Workbench:
+
+```text
+SetMovement(0.0, false) -> Idle
+SetMovement(0.5, true)  -> Walk
+SetMovement(1.0, false) -> Run
+StartAttack()           -> Attack
+FinishAttack()          -> Idle/Walk/Run afhængigt af Speed
+StartHit()              -> Hit
+FinishHit()             -> Idle/Walk/Run afhængigt af Speed
+StartScream()           -> Scream
+FinishScream()          -> Idle/Walk/Run afhængigt af Speed
+Die()                   -> Death
+```
+
+### Næste anbefalede trin
+
+Når componenten er sat på prefabben, skal den testes med Animation Editor Live Debug:
+
+1. Start et test-scenario.
+2. Åbn Animation Editor og den zombie animation workspace.
+3. Brug Live Debug / Fetch / Attach på zombie-entityen.
+4. Kontrollér at variablerne ændrer sig live, når metoderne kaldes.
+5. Først derefter bør AI/pathfinding og damage kobles permanent på animation controlleren.
+
+På længere sigt bør fallback timers erstattes af animation events, især for attack, så damage kan ske på det rigtige slag-frame og `FinishAttack()` først kaldes ved animationens slut.
